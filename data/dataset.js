@@ -1,7 +1,5 @@
-/* data/dataset.js — Fallback OFFLINE
- * Dados reais da planilha "Diário Performance" (CARENA · maio/2026).
- * Usado automaticamente se a API (proxy /api/sheets) falhar ou não estiver configurada.
- * Mesma forma de objeto que o sheets.js produz a partir da planilha ao vivo. */
+/* data/dataset.js — Dados da planilha "Diário Performance" (CARENA · mai/2026).
+ * Atualizado a partir da planilha enviada pelo cliente. */
 window.DATASET = [
   {date:new Date(2026,4,1),label:'01/05',weekday:'Sex',gSpend:204.25,gLeads:11,gCpl:18.57,fSpend:0,fLeads:4,fCpl:0,totalLeads:15,pctGoal:53},
   {date:new Date(2026,4,2),label:'02/05',weekday:'Sáb',gSpend:206.13,gLeads:12,gCpl:17.18,fSpend:0,fLeads:6,fCpl:0,totalLeads:18,pctGoal:63},
@@ -35,8 +33,6 @@ window.DATASET = [
   {date:new Date(2026,4,30),label:'30/05',weekday:'Sáb',gSpend:264.88,gLeads:14,gCpl:18.92,fSpend:0,fLeads:5,fCpl:0,totalLeads:19,pctGoal:67},
   {date:new Date(2026,4,31),label:'31/05',weekday:'Dom',gSpend:14.91,gLeads:3,gCpl:4.97,fSpend:0,fLeads:3,fCpl:0,totalLeads:6,pctGoal:21}
 ];
-
-/* Metas do bloco PROJETADO da planilha (mensais) */
 window.GOALS_FALLBACK = {
   all:      { budget:14320, leads:885, cpl:16.18 },
   google:   { budget:13000, leads:765, cpl:16.99 },
