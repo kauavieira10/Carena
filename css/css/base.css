@@ -1,0 +1,44 @@
+/* ════════════════════════════ base.css ════════════════════════════ */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:var(--font-body);
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  position:relative;
+  min-height:100vh;
+  transition:background .4s ease,color .4s ease;
+}
+
+/* BLOBS coloridos animados (o glass só funciona com cor ATRÁS p/ desfocar) */
+body::before,body::after,.app::before{
+  content:"";position:fixed;border-radius:50%;
+  filter:blur(100px);opacity:var(--blob-opacity);
+  z-index:0;pointer-events:none;will-change:transform;
+}
+body::before{ /* azul */
+  width:620px;height:620px;background:var(--primary);
+  top:-180px;left:-120px;animation:float1 22s ease-in-out infinite;
+}
+body::after{ /* laranja */
+  width:560px;height:560px;background:var(--accent);
+  bottom:-160px;right:-120px;animation:float2 25s ease-in-out infinite;
+}
+.app::before{ /* roxo */
+  width:520px;height:520px;background:var(--purple);
+  top:40%;left:45%;animation:float3 20s ease-in-out infinite;
+}
+@keyframes float1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(120px,80px) scale(1.1)}}
+@keyframes float2{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-100px,-90px) scale(1.08)}}
+@keyframes float3{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-35%,-65%) scale(1.12)}}
+
+@media(max-width:768px){
+  body::before{width:380px;height:380px}
+  body::after{width:340px;height:340px}
+  .app::before{width:320px;height:320px}
+}
+
+.app{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:0 22px 64px}
