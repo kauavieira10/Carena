@@ -16,19 +16,22 @@ window.Sheets = (function () {
     const dias = [];
     const goals = JSON.parse(JSON.stringify(CONFIG.goals)); // metas padrão
 
-    // 1) Metas do bloco PROJETADO (linhas que começam com Google / Facebook / TOTAL)
-    values.forEach(r => {
+    // 1) Localiza o cabeçalho da tabela diária PRIMEIRO (normaliza espaços/quebras de linha)
+    let head = -1;
+    for (let i=0;i<values.length;i++){
+      const joined = values[i].join('|').toUpperCase().replace(/\s+/g, ' ');
+      if (joined.includes('DATA') && joined.includes('VERBA GOOGLE')) { head = i; break; }
+    }
+
+    // 2) Metas do bloco PROJETADO — SOMENTE antes do cabeçalho diário
+    //    (a planilha tem uma 2ª linha "TOTAL" no fim da tabela diária que NÃO é meta)
+    const limit = head >= 0 ? head : values.length;
+    for (let i=0;i<limit;i++){
+      const r = values[i];
       const k = String(r[0]||'').trim().toLowerCase();
       if (k === 'google')   goals.google   = { budget:U.parseBRL(r[1]), leads:U.parseInt0(r[3]), cpl:U.parseBRL(r[4]) };
       if (k === 'facebook') goals.facebook = { budget:U.parseBRL(r[1]), leads:U.parseInt0(r[3]), cpl:U.parseBRL(r[4]) };
       if (k === 'total')    goals.all      = { budget:U.parseBRL(r[1]), leads:U.parseInt0(r[3]), cpl:U.parseBRL(r[4]) };
-    });
-
-    // 2) Localiza o cabeçalho da tabela diária
-    let head = -1;
-    for (let i=0;i<values.length;i++){
-      const joined = values[i].join('|').toUpperCase();
-      if (joined.includes('DATA') && joined.includes('VERBA GOOGLE')) { head = i; break; }
     }
 
     // 3) Lê as linhas diárias (col: 0 DATA,1 DIA,2 VERBA G,3 LEAD G,7 VERBA FB,8 LEAD FB)
@@ -63,6 +66,7 @@ window.Sheets = (function () {
     const values = json.values || json.data || [];
     if (!values.length) throw new Error('planilha vazia');
     const out = parse(values);
+    if (!out.dias.length) throw new Error('cabeçalho da tabela diária não encontrado');
     console.log('[Sheets] ✓ '+out.dias.length+' linhas carregadas');
     return out;
   }

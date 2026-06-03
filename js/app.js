@@ -41,6 +41,7 @@ window.App = {
 
   renderRange(){
     const d = this.data;
+    if (!d.length) return;
     const lbl = d.length===1 ? d[0].label : `${d[0].label} – ${d[d.length-1].label}`;
     txt('range-label', lbl + '  ·  ' + d.length + (d.length>1?' dias':' dia'));
     txt('table-count', d.length + ' registro' + (d.length>1?'s':''));
