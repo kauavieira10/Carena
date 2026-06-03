@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: carena-dashboard
+    runtime: node
+    plan: free
+    buildCommand: ""        # sem build — Node puro
+    startCommand: node server.js
+    envVars:
+      - key: NODE_VERSION
+        value: "18"
+      - key: GOOGLE_SHEETS_API_KEY
+        sync: false          # cole no painel do Render (secreto)
+      - key: GOOGLE_SHEETS_ID
+        sync: false
+      - key: GOOGLE_SHEETS_NAME
+        value: "Diário Performance"
+      - key: GOOGLE_SHEETS_RANGE
+        value: "A1:Z200"
+      - key: META_ACCESS_TOKEN
+        sync: false          # token de System User (não expira)
+      - key: META_AD_ACCOUNT_ID
+        sync: false          # formato act_XXXXXXXXX
