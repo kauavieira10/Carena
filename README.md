@@ -19,7 +19,7 @@ carena-dashboard/
 ├── index.html
 ├── assets/            acesso.png (logo agência, branca) · carena.png (logo cliente, branca)
 ├── css/               variables · base · components · dashboard
-├── js/                config · utils · theme · sheets · meta · charts · campaigns · date-filter · report · app
+├── js/                config · utils · theme · sheets · meta · charts · campaigns · collapse · platform-toggle · date-filter · report · app
 ├── data/dataset.js    fallback offline (dados reais) + GOOGLE_CAMPAIGNS (snapshot Google Ads)
 ├── netlify/functions/ sheets-proxy · meta-creatives-proxy
 ├── server.js          proxy Node p/ Render

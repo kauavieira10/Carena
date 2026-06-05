@@ -22,6 +22,17 @@
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/dashboard.css">
+<style>
+  /* Segmentado de plataforma (substitui o dropdown "Todas as plataformas") */
+  .pf-seg{display:inline-flex;gap:4px;background:var(--glass-bg);border:var(--glass-border);border-radius:12px;padding:4px}
+  .pf-seg-btn{border:0;background:transparent;color:var(--text);font:inherit;font-size:13px;font-weight:600;padding:7px 15px;border-radius:9px;cursor:pointer;transition:background .15s,color .15s}
+  .pf-seg-btn:hover{color:var(--primary)}
+  .pf-seg-btn.active{background:var(--primary);color:#fff}
+  .pf-seg-btn.active:hover{color:#fff}
+  /* Cabeçalho "Resumo diário" clicável */
+  #daily-head:hover .title{color:var(--primary)}
+  #daily-caret{display:inline-block;transition:transform .15s}
+</style>
 </head>
 <body>
 <div class="app">
@@ -39,7 +50,11 @@
       <button class="tab" data-view="creatives">Criativos</button>
     </div>
     <div class="toolbar-right">
-      <select class="select" id="pf-filter">
+      <div class="pf-seg" id="pf-seg">
+        <button class="pf-seg-btn active" data-pf="google" type="button">Google</button>
+        <button class="pf-seg-btn" data-pf="facebook" type="button">Meta</button>
+      </div>
+      <select class="select" id="pf-filter" style="display:none">
         <option value="all">Todas as plataformas</option>
         <option value="google">Google</option>
         <option value="facebook">Facebook</option>
@@ -141,9 +156,9 @@
     </section>
 
     <section class="table-card glass">
-      <div class="table-head"><span class="title">Resumo diário</span>
+      <div class="table-head" id="daily-head" style="cursor:pointer;user-select:none"><span class="title">Resumo diário <span id="daily-caret" style="font-size:12px;color:var(--muted);font-weight:400">▸</span></span>
         <span class="sub" style="color:var(--muted);font-size:12px" id="table-count"></span></div>
-      <div class="table-scroll">
+      <div class="table-scroll" id="daily-scroll" style="display:none">
         <table class="daily"><thead><tr>
           <th>Data</th><th>Dia</th><th>Verba Google</th><th>Leads G</th><th>CPL G</th>
           <th>Verba FB</th><th>Leads FB</th><th>CPL FB</th><th>Total leads</th><th>% Meta</th>
@@ -183,5 +198,7 @@
 <script src="js/report.js"></script>
 <script src="js/app.js"></script>
 <script src="js/campaigns.js"></script>
+<script src="js/collapse.js"></script>
+<script src="js/platform-toggle.js"></script>
 </body>
 </html>
