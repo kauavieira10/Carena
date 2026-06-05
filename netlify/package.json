@@ -1,0 +1,12 @@
+{
+  "name": "carena-dashboard",
+  "version": "1.0.0",
+  "description": "Dashboard de performance de marketing digital (glassmorphism) — CARENA, by acesso.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": { "node": ">=18" },
+  "license": "MIT"
+}

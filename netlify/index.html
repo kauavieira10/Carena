@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard de Performance — CARENA</title>
+
+<!-- Aplica tema ANTES de pintar (evita flash). try/catch p/ ambientes sem localStorage -->
+<script>
+(function () {
+  try { document.documentElement.setAttribute('data-theme', localStorage.getItem('dashboard-theme') || 'dark'); }
+  catch (e) { document.documentElement.setAttribute('data-theme', 'dark'); }
+})();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <header class="header">
+    <img class="brand-logo" src="assets/acesso.png" alt="acesso">
+    <div class="client-id"><img class="client-logo" src="assets/carena.png" alt="CARENA"></div>
+  </header>
+
+  <!-- TOOLBAR -->
+  <div class="toolbar glass">
+    <div class="tabs">
+      <button class="tab active" data-view="overview">Visão geral</button>
+      <button class="tab" data-view="creatives">Criativos</button>
+    </div>
+    <div class="toolbar-right">
+      <select class="select" id="pf-filter">
+        <option value="all">Todas as plataformas</option>
+        <option value="google">Google</option>
+        <option value="facebook">Facebook</option>
+      </select>
+      <button class="btn" id="report"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2v6h6M4 2h10l6 6v14H4z"/></svg>Relatório</button>
+      <button class="btn" id="refresh"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.5 9a9 9 0 0114.8-3.4L23 10M1 14l4.7 4.4A9 9 0 0020.5 15"/></svg>Atualizar</button>
+      <button class="btn" id="theme-toggle" aria-label="Alternar tema"><span id="theme-icon"></span></button>
+    </div>
+  </div>
+
+  <!-- SELETOR DE PERÍODO -->
+  <div class="period glass">
+    <div class="period-presets" id="presets">
+      <button class="preset" data-d="1">Hoje</button>
+      <button class="preset" data-d="2">Ontem</button>
+      <button class="preset" data-d="7">7 dias</button>
+      <button class="preset" data-d="30">30 dias</button>
+      <button class="preset active" data-d="month">Este mês</button>
+      <button class="btn" id="open-cal" style="padding:8px 13px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        Calendário
+      </button>
+    </div>
+    <div class="period-status">
+      <span class="live"><span class="dot"></span>Ao vivo</span>
+      <span class="period-range" id="range-label">—</span>
+    </div>
+  </div>
+
+  <!-- ===================== VISÃO GERAL ===================== -->
+  <div id="view-overview">
+    <section class="hero">
+      <div class="kpi-stack">
+        <div class="kpi glass">
+          <div class="kpi-head"><span class="kpi-label">Orçamento</span>
+            <span class="kpi-icon budget"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></span></div>
+          <div class="kpi-value" id="kpi-budget">—</div>
+          <div class="kpi-meta"><span id="kpi-budget-goal">meta —</span><span class="kpi-pct up" id="kpi-budget-pct">—</span></div>
+          <div class="bar"><i id="kpi-budget-bar" style="width:0%"></i></div>
+        </div>
+        <div class="kpi glass">
+          <div class="kpi-head"><span class="kpi-label">Leads</span>
+            <span class="kpi-icon leads"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13A4 4 0 0116 11"/></svg></span></div>
+          <div class="kpi-value" id="kpi-leads">—</div>
+          <div class="kpi-meta"><span id="kpi-leads-goal">meta —</span><span class="kpi-pct up" id="kpi-leads-pct">—</span></div>
+          <div class="bar"><i id="kpi-leads-bar" style="width:0%;background:linear-gradient(90deg,var(--success),#3ec47b)"></i></div>
+        </div>
+        <div class="kpi glass">
+          <div class="kpi-head"><span class="kpi-label">CPL médio</span>
+            <span class="kpi-icon cpl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 14l4-4 3 3 5-6"/></svg></span></div>
+          <div class="kpi-value" id="kpi-cpl">—</div>
+          <div class="kpi-meta"><span id="kpi-cpl-goal">meta —</span><span class="kpi-pct up" id="kpi-cpl-pct">—</span></div>
+          <div class="bar"><i id="kpi-cpl-bar" style="width:0%;background:linear-gradient(90deg,var(--accent),#ffb15c)"></i></div>
+        </div>
+      </div>
+      <div class="hero-chart glass">
+        <div class="title">Leads acumulados</div>
+        <div class="sub" id="hero-sub">Evolução diária no período selecionado</div>
+        <div class="hero-canvas-wrap"><canvas id="heroChart"></canvas></div>
+      </div>
+    </section>
+
+    <section class="platforms" id="platforms-grid">
+      <div class="platform google glass">
+        <div class="platform-head"><div class="pf-logo">G</div>
+          <div><div class="pf-name">Google Ads</div><div class="pf-sub">Rede de Pesquisa + Display</div></div></div>
+        <table class="pf-table"><thead><tr><th>Métrica</th><th>Meta</th><th>Realizado</th><th>%</th></tr></thead>
+          <tbody id="pf-google"></tbody></table>
+      </div>
+      <div class="platform facebook glass">
+        <div class="platform-head"><div class="pf-logo">f</div>
+          <div><div class="pf-name">Meta Ads</div><div class="pf-sub">Facebook + Instagram</div></div></div>
+        <table class="pf-table"><thead><tr><th>Métrica</th><th>Meta</th><th>Realizado</th><th>%</th></tr></thead>
+          <tbody id="pf-facebook"></tbody></table>
+        <div style="padding:8px 22px 14px;font-size:11px;color:var(--muted)">*Verba do Facebook não lançada por dia na planilha — CPL diário indisponível.</div>
+      </div>
+    </section>
+
+    <section class="table-card glass" id="campaigns-card">
+      <div class="table-head">
+        <span class="title">Top campanhas — Google Ads</span>
+        <span class="sub" style="color:var(--muted);font-size:12px" id="campaigns-count">—</span>
+      </div>
+      <div class="table-scroll">
+        <table class="daily"><thead><tr>
+          <th>Campanha</th><th>Tipo</th><th>Investimento</th><th>Cliques</th><th>Conversões</th><th>CPA</th>
+        </tr></thead><tbody id="campaigns-body"></tbody></table>
+      </div>
+      <div style="padding:8px 22px 14px;font-size:11px;color:var(--muted)">*Snapshot de campanhas (mai/2026) puxado da conta Google Ads. Os totais agregados continuam vindo da planilha.</div>
+    </section>
+
+    <section class="compare">
+      <div class="panel glass"><div class="title">Distribuição de verba</div>
+        <div class="sub">Investimento por plataforma no período</div>
+        <div class="panel-canvas"><canvas id="doughnutChart"></canvas></div></div>
+      <div class="panel glass"><div class="title">Tendência de CPL</div>
+        <div class="sub">Custo por lead ao longo do tempo</div>
+        <div class="panel-canvas"><canvas id="cplChart"></canvas></div></div>
+    </section>
+
+    <section class="table-card glass">
+      <div class="table-head" id="daily-head" style="cursor:pointer;user-select:none"><span class="title">Resumo diário <span id="daily-caret" style="font-size:12px;color:var(--muted);font-weight:400">▸</span></span>
+        <span class="sub" style="color:var(--muted);font-size:12px" id="table-count"></span></div>
+      <div class="table-scroll" id="daily-scroll" style="display:none">
+        <table class="daily"><thead><tr>
+          <th>Data</th><th>Dia</th><th>Verba Google</th><th>Leads G</th><th>CPL G</th>
+          <th>Verba FB</th><th>Leads FB</th><th>CPL FB</th><th>Total leads</th><th>% Meta</th>
+        </tr></thead><tbody id="daily-body"></tbody></table>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===================== CRIATIVOS (Meta Ads) ===================== -->
+  <div id="view-creatives" style="display:none">
+    <section class="cr-summary">
+      <div class="cr-kpi glass"><span>Criativos</span><b id="cr-kpi-count">—</b></div>
+      <div class="cr-kpi glass"><span>Investimento</span><b id="cr-kpi-spend">—</b></div>
+      <div class="cr-kpi glass"><span>Conversões</span><b id="cr-kpi-conv">—</b></div>
+      <div class="cr-kpi glass"><span>CPL médio</span><b id="cr-kpi-cpl">—</b></div>
+    </section>
+
+    <div class="cr-statusbar glass" id="cr-status">
+      <button class="cr-pill active" data-s="all"><span class="cr-dot all"></span>Todos <em id="count-all">0</em></button>
+      <button class="cr-pill" data-s="active"><span class="cr-dot on"></span>Ativos <em id="count-active">0</em></button>
+      <button class="cr-pill" data-s="paused"><span class="cr-dot off"></span>Pausados <em id="count-paused">0</em></button>
+    </div>
+
+    <section class="creatives-grid" id="creatives-grid"></section>
+  </div>
+</div>
+
+<!-- módulos (ordem importa: globals via window.*) -->
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="data/dataset.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/sheets.js"></script>
+<script src="js/meta.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/date-filter.js"></script>
+<script src="js/report.js"></script>
+<script src="js/app.js"></script>
+<script src="js/campaigns.js"></script>
+<script src="js/collapse.js"></script>
+</body>
+</html>

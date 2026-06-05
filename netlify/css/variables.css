@@ -1,0 +1,51 @@
+/* ════════════════════════════ variables.css ════════════════════════════ */
+:root{
+  --primary:#1F6FE5;       /* azul Google/marca */
+  --accent:#EF8A1F;        /* laranja Facebook  */
+  --success:#1F9D56;       /* verde, atingido   */
+  --danger:#DC4632;        /* vermelho, abaixo  */
+  --purple:#7B5BE6;        /* blob roxo         */
+
+  --radius:18px;
+  --radius-sm:12px;
+  --radius-pill:999px;
+
+  --font-body:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --font-display:'Plus Jakarta Sans','Inter',sans-serif;
+}
+
+/* TEMA CLARO */
+:root[data-theme="light"]{
+  --bg:#EBF1F9;
+  --text:#0F1F38;
+  --muted:#5B6B87;
+
+  --glass-bg:linear-gradient(140deg,rgba(255,255,255,0.55),rgba(255,255,255,0.30));
+  --glass-bg-strong:linear-gradient(140deg,rgba(255,255,255,0.72),rgba(255,255,255,0.45));
+  --glass-border:1px solid rgba(255,255,255,0.6);
+  --glass-shadow:0 8px 28px rgba(15,42,95,0.10),inset 0 1px 0 rgba(255,255,255,0.75),inset 0 -1px 0 rgba(0,0,0,0.04);
+  --glass-top:linear-gradient(90deg,transparent,rgba(255,255,255,0.9),transparent);
+
+  --hairline:rgba(15,31,56,0.08);
+  --row-hover:rgba(31,111,229,0.06);
+  --blob-opacity:0.40;
+  --track:rgba(15,31,56,0.08);
+}
+
+/* TEMA ESCURO (padrão) — branco em baixa opacidade, NUNCA preto translúcido */
+:root[data-theme="dark"]{
+  --bg:#060B1A;
+  --text:#ECF1FB;
+  --muted:#94A7C6;
+
+  --glass-bg:linear-gradient(140deg,rgba(255,255,255,0.09),rgba(255,255,255,0.04));
+  --glass-bg-strong:linear-gradient(140deg,rgba(255,255,255,0.14),rgba(255,255,255,0.07));
+  --glass-border:1px solid rgba(255,255,255,0.12);
+  --glass-shadow:0 8px 28px rgba(0,0,0,0.45),inset 0 1px 0 rgba(255,255,255,0.14),inset 0 -1px 0 rgba(0,0,0,0.25);
+  --glass-top:linear-gradient(90deg,transparent,rgba(255,255,255,0.45),transparent);
+
+  --hairline:rgba(255,255,255,0.08);
+  --row-hover:rgba(255,255,255,0.05);
+  --blob-opacity:0.50;
+  --track:rgba(255,255,255,0.10);
+}

@@ -1,0 +1,14 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+# /api/* -> funções serverless
+[[redirects]]
+  from = "/api/sheets"
+  to = "/.netlify/functions/sheets-proxy"
+  status = 200
+
+[[redirects]]
+  from = "/api/meta-creatives"
+  to = "/.netlify/functions/meta-creatives-proxy"
+  status = 200
