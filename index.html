@@ -118,6 +118,19 @@
       </div>
     </section>
 
+    <section class="table-card glass" id="campaigns-card">
+      <div class="table-head">
+        <span class="title">Top campanhas — Google Ads</span>
+        <span class="sub" style="color:var(--muted);font-size:12px" id="campaigns-count">—</span>
+      </div>
+      <div class="table-scroll">
+        <table class="daily"><thead><tr>
+          <th>Campanha</th><th>Tipo</th><th>Investimento</th><th>Cliques</th><th>Conversões</th><th>CPA</th>
+        </tr></thead><tbody id="campaigns-body"></tbody></table>
+      </div>
+      <div style="padding:8px 22px 14px;font-size:11px;color:var(--muted)">*Snapshot de campanhas (mai/2026) puxado da conta Google Ads. Os totais agregados continuam vindo da planilha.</div>
+    </section>
+
     <section class="compare">
       <div class="panel glass"><div class="title">Distribuição de verba</div>
         <div class="sub">Investimento por plataforma no período</div>
@@ -169,5 +182,6 @@
 <script src="js/date-filter.js"></script>
 <script src="js/report.js"></script>
 <script src="js/app.js"></script>
+<script src="js/campaigns.js"></script>
 </body>
 </html>

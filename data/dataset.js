@@ -38,3 +38,18 @@ window.GOALS_FALLBACK = {
   google:   { budget:13000, leads:765, cpl:16.99 },
   facebook: { budget:1320,  leads:120, cpl:11.00 }
 };
+
+/* Campanhas Google Ads — snapshot REAL puxado da conta Carena (ID 6554312523)
+ * via MCC, período mai/2026. Dados estáticos (Opção A). Para atualizar:
+ * volte ao Claude e peça "atualizar campanhas Google da Carena". */
+window.GOOGLE_CAMPAIGNS = [
+  { id:'forros-pvc-site',   name:'[Acesso][Search][MaxConv] - Forros PVC [Site]',  status:'ENABLED', impressions:12539, clicks:1499, ctr:11.95, conversions:219, spend:3562.67, cpa:16.30 },
+  { id:'drywall',           name:'[Acesso][Search][MaxConv] - DryWall',            status:'ENABLED', impressions:8572,  clicks:738,  ctr:8.61,  conversions:101, spend:2443.11, cpa:24.21 },
+  { id:'forros-modular',    name:'[Acesso][Search] - Forros modular (Maior ticket)', status:'ENABLED', impressions:4675, clicks:545, ctr:11.66, conversions:101, spend:1830.24, cpa:18.20 },
+  { id:'divisorias',        name:'[Acesso][Search] - Divisórias',                  status:'ENABLED', impressions:3177,  clicks:355,  ctr:11.17, conversions:64,  spend:1424.18, cpa:22.31 },
+  { id:'placa-cimenticia',  name:'[Acesso][Search][MaxConv] - Placa Cimentícia',   status:'ENABLED', impressions:3156,  clicks:427,  ctr:13.53, conversions:74,  spend:1290.94, cpa:17.48 },
+  { id:'painel-masterboard',name:'[Acesso][Search][MaxConv] - Painel Masterboard', status:'ENABLED', impressions:2392,  clicks:172,  ctr:7.19,  conversions:37,  spend:913.04,  cpa:24.47 },
+  { id:'branding',          name:'[Acesso][Search] - Branding',                    status:'ENABLED', impressions:972,   clicks:331,  ctr:34.05, conversions:127, spend:536.66,  cpa:4.21 },
+  { id:'pmax-visitas-loja', name:'[Acesso][Pmax] - Visitas a Loja',                status:'ENABLED', impressions:10236, clicks:718,  ctr:7.01,  conversions:77,  spend:435.48,  cpa:5.66 },
+  { id:'pmax-drywall',      name:'[Acesso][Pmax] - Drywall',                       status:'ENABLED', impressions:3950,  clicks:235,  ctr:5.95,  conversions:11,  spend:185.70,  cpa:16.88 }
+];
