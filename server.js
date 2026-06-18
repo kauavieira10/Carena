@@ -11,7 +11,8 @@ const PORT = process.env.PORT || 3000;
 const {
   GOOGLE_SHEETS_API_KEY, GOOGLE_SHEETS_ID,
   GOOGLE_SHEETS_NAME = 'Diário Performance', GOOGLE_SHEETS_RANGE = 'A1:Z200',
-  META_ACCESS_TOKEN, META_AD_ACCOUNT_ID
+  META_ACCESS_TOKEN, META_AD_ACCOUNT_ID,
+  TIKTOK_SYNC_URL   // URL do serviço tiktok-sync (ex.: https://tiktok-sync.onrender.com)
 } = process.env;
 
 const MIME = { '.html':'text/html','.css':'text/css','.js':'application/javascript',
@@ -128,6 +129,21 @@ async function getCreatives(query){
   return out;
 }
 
+/* ---------- /api/tiktok/* (proxy p/ o serviço tiktok-sync) ----------
+ * O dashboard nunca fala direto com o tiktok-sync: passa por aqui (mesma origem,
+ * sem CORS) e o serviço tiktok-sync continua dono dos dados/credenciais. */
+async function getTikTok(targetPath){
+  if (!TIKTOK_SYNC_URL) throw new Error('TikTok não configurado');
+  const hit = cached('tiktok:' + targetPath); if (hit) return hit;
+  const base = TIKTOK_SYNC_URL.replace(/\/$/, '');
+  const r = await fetch(base + targetPath);
+  const json = await r.json();
+  if (json && json.error) throw new Error(json.error);
+  console.log('[TikTok] ✓ ' + targetPath);
+  setCache('tiktok:' + targetPath, json);
+  return json;
+}
+
 /* ---------- estáticos ---------- */
 function serveStatic(req, res){
   let p = decodeURIComponent(req.url.split('?')[0]);
@@ -153,6 +169,19 @@ http.createServer(async (req, res) => {
     if (url.startsWith('/api/meta-creatives')) {
       const q = url.split('?')[1] || '';
       const data = await getCreatives(q);
+      res.writeHead(200, { 'Content-Type':'application/json', 'Cache-Control':'public, max-age=300' });
+      return res.end(JSON.stringify(data));
+    }
+    if (url.startsWith('/api/tiktok/')) {
+      const u = new URL(url, 'http://x');
+      const seg = u.pathname.replace('/api/tiktok/', '');
+      const openId = u.searchParams.get('openId');
+      let target = null;
+      if (seg === 'accounts')                 target = '/api/accounts';
+      else if (seg === 'overview' && openId)  target = `/api/accounts/${encodeURIComponent(openId)}/overview`;
+      else if (seg === 'videos' && openId)    target = `/api/accounts/${encodeURIComponent(openId)}/videos`;
+      if (!target) { res.writeHead(400, { 'Content-Type':'application/json' }); return res.end(JSON.stringify({ error:'rota tiktok inválida' })); }
+      const data = await getTikTok(target);
       res.writeHead(200, { 'Content-Type':'application/json', 'Cache-Control':'public, max-age=300' });
       return res.end(JSON.stringify(data));
     }

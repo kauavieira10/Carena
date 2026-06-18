@@ -20,3 +20,5 @@ services:
         sync: false          # token de System User (não expira)
       - key: META_AD_ACCOUNT_ID
         sync: false          # formato act_XXXXXXXXX
+      - key: TIKTOK_SYNC_URL
+        sync: false          # URL do serviço tiktok-sync (opcional, p/ aba TikTok)

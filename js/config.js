@@ -6,9 +6,17 @@ window.CONFIG = {
 
   // Endpoints do proxy backend (Render ou Netlify). Relativos = mesmo host.
   api: {
-    sheets:    '/api/sheets',
-    creatives: '/api/meta-creatives'
+    sheets:          '/api/sheets',
+    creatives:       '/api/meta-creatives',
+    tiktokAccounts:  '/api/tiktok/accounts',
+    tiktokOverview:  '/api/tiktok/overview',   // ?openId=...
+    tiktokVideos:    '/api/tiktok/videos'      // ?openId=...
   },
+
+  // TikTok: deixe openId vazio p/ usar a 1ª conta conectada no tiktok-sync,
+  // ou fixe o open_id de uma conta específica. (O serviço é configurado via
+  // env TIKTOK_SYNC_URL no backend.)
+  tiktok: { openId: '' },
 
   // Mês de referência dos dados (usado p/ escalar metas proporcionalmente)
   monthDaysFallback: 31,

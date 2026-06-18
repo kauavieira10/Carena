@@ -5,6 +5,7 @@ window.App = {
   goals: CONFIG.goals,
   monthDays: CONFIG.monthDaysFallback,
   creativesLoaded: false,
+  tiktokLoaded: false,
   PF_LABEL: { all:'Todas as plataformas', google:'Google', facebook:'Facebook' },
 
   /* ---------- cálculos ---------- */
@@ -109,7 +110,16 @@ window.App = {
     document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.view===name));
     el('view-overview').style.display  = name==='overview' ? '' : 'none';
     el('view-creatives').style.display = name==='creatives' ? '' : 'none';
+    const vtt = el('view-tiktok'); if (vtt) vtt.style.display = name==='tiktok' ? '' : 'none';
+
+    // Período e segmentado de plataforma só fazem sentido nas views de mídia paga.
+    const period = document.querySelector('.period'), seg = el('pf-seg');
+    const hideControls = (name==='tiktok');
+    if (period) period.style.display = hideControls ? 'none' : '';
+    if (seg)    seg.style.display    = hideControls ? 'none' : '';
+
     if (name==='creatives' && !this.creativesLoaded){ this.creativesLoaded = true; Meta.load(this.range()); }
+    if (name==='tiktok' && !this.tiktokLoaded && window.TikTok){ this.tiktokLoaded = true; TikTok.load(); }
   },
   range(){ const d=this.data; return d.length?{ from:d[0].label, to:d[d.length-1].label }:null; },
   syncCreatives(){ if (this.creativesLoaded) Meta.load(this.range()); },
@@ -151,7 +161,7 @@ window.App = {
     });
     document.getElementById('refresh').addEventListener('click', async () => { await this.loadData(); this.applyPreset('month'); });
     document.getElementById('report').addEventListener('click', () => Report.generate(this));
-    Theme.init(() => Charts.render(this.data, this.platform));
+    Theme.init(() => { Charts.render(this.data, this.platform); if (window.TikTok && this.tiktokLoaded) TikTok.redraw(); });
     DateFilter.init();
     Meta.initFilters();
   },

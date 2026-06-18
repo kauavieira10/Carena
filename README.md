@@ -50,6 +50,12 @@ Sem `.env`, o dashboard abre normalmente em **modo demonstração** (dados de `d
 | `GOOGLE_SHEETS_RANGE` | Intervalo (ex.: `A1:Z200`) |
 | `META_ACCESS_TOKEN` | Token de System User do Meta (opcional, p/ Criativos) |
 | `META_AD_ACCOUNT_ID` | ID da conta de anúncios (`act_XXXXXXXXX`) |
+| `TIKTOK_SYNC_URL` | URL do serviço **tiktok-sync** (opcional, p/ a aba TikTok). Ex.: `https://tiktok-sync.onrender.com` |
+
+> **Aba TikTok**: consome o serviço [`tiktok-sync`](../tiktok-sync) via proxy `/api/tiktok/*`
+> (mesma origem, sem CORS). Mostra seguidores/curtidas/vídeos, evolução de seguidores e top
+> vídeos da conta conectada. Sem `TIKTOK_SYNC_URL`, a aba exibe "TikTok não configurado".
+> A conta a exibir é a 1ª conectada no tiktok-sync, ou fixe um `open_id` em `CONFIG.tiktok.openId` (`js/config.js`).
 
 ## 🚀 Deploy
 
